@@ -6,14 +6,16 @@
   <title>College ERP - Student Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
   <style>
-    body {
+   /* ---------------- Base ---------------- */
+body {
   margin: 0;
   font-family: Arial, sans-serif;
   display: flex;
-  flex-wrap: wrap;
+  min-height: 100vh;
+  flex-direction: row;
 }
 
-/* Sidebar */
+/* ---------------- Sidebar ---------------- */
 .sidebar {
   width: 220px;
   background: #2c3e50;
@@ -24,6 +26,7 @@
   top: 0;
   padding-top: 20px;
   transition: all 0.3s ease;
+  z-index: 1000;
 }
 .sidebar h2 {
   text-align: center;
@@ -41,7 +44,7 @@
   background: #34495e;
 }
 
-/* Content */
+/* ---------------- Content ---------------- */
 .content {
   margin-left: 220px;
   padding: 20px;
@@ -49,11 +52,14 @@
   transition: margin-left 0.3s ease;
 }
 
+/* Dashboard Heading */
 h1 {
   margin-bottom: 20px;
+  font-size: 28px;
+  color: #2c3e50;
 }
 
-/* Profile card */
+/* ---------------- Profile Card ---------------- */
 .profile-card {
   background: #fff;
   padding: 20px;
@@ -82,20 +88,16 @@ h1 {
   background: #c0392b;
 }
 
-/* ----------------- Responsive ----------------- */
+/* ---------------- Responsive ---------------- */
 @media (max-width: 768px) {
+  body {
+    flex-direction: column;
+  }
   .sidebar {
     width: 100%;
     height: auto;
     position: relative;
     padding: 10px 0;
-  }
-  .sidebar h2 {
-    font-size: 18px;
-  }
-  .sidebar a {
-    padding: 10px 15px;
-    text-align: center;
   }
   .content {
     margin-left: 0;
@@ -108,12 +110,12 @@ h1 {
 }
 
 @media (max-width: 480px) {
+  h1 {
+    font-size: 22px;
+  }
   .sidebar a {
     font-size: 14px;
     padding: 8px 10px;
-  }
-  h1 {
-    font-size: 22px;
   }
   .profile-card p {
     font-size: 14px;
