@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Notifications</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .main-content h1 { margin-bottom: 20px; color: #4e54c8; }
+
+    .notification-form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    .notification-form label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    .notification-form input, .notification-form textarea, .notification-form select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .notification-form button {
+      padding: 10px 20px;
+      background: #4e54c8;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .notification-form button:hover { background: #3b3fc1; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    table th, table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #eee;
+      text-align: center;
+    }
+    table th {
+      background-color: #667eea;
+      color: #fff;
+    }
+    table tr:nth-child(even){ background-color: #f9f9f9; }
+    table tr:hover { background-color: #f1f3ff; }
+
+    .edit-btn {
+      padding: 5px 10px;
+      background: #764ba2;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .edit-btn:hover { background: #5a2ea6; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Admin Portal</h2>
+    <button onclick="navigate('dashboard.html')">Dashboard</button>
+    <button onclick="navigate('faculty.html')">Faculty</button>
+    <button onclick="navigate('students.html')">Students</button>
+    <button onclick="navigate('fees.html')">Fees</button>
+    <button onclick="navigate('exams.html')">Exams</button>
+    <button onclick="navigate('notifications.html')">Notifications</button>
+    <button onclick="navigate('library.html')">Library</button>
+    <button onclick="navigate('hostel.html')">Hostel</button>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="profile-info">
+        <strong>Oliver King</strong><br>
+        Role: SuperAdmin
+      </div>
+    </div>
+
+    <h1>Admin Notifications</h1>
+
+    <div class="notification-form">
+      <label for="notifTitle">Title</label>
+      <input type="text" id="notifTitle" placeholder="Enter notification title">
+
+      <label for="notifDesc">Description</label>
+      <textarea id="notifDesc" rows="4" placeholder="Enter notification description"></textarea>
+
+      <label for="notifClass">Class / Audience</label>
+      <select id="notifClass">
+        <option value="All Classes">All Classes</option>
+        <option value="CSE-A">CSE-A</option>
+        <option value="CSE-B">CSE-B</option>
+        <option value="ECE-A">ECE-A</option>
+        <option value="ECE-B">ECE-B</option>
+        <option value="EEE-A">EEE-A</option>
+        <option value="EEE-B">EEE-B</option>
+        <option value="MECH-A">MECH-A</option>
+        <option value="MECH-B">MECH-B</option>
+      </select>
+
+      <button onclick="sendNotification()">Send Notification</button>
+    </div>
+
+    <h2>Sent Notifications</h2>
+    <table id="sentTable">
+      <thead>
+        <tr>
+          <th>NotificationID</th>
+          <th>Date</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Class / Audience</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>N001</td>
+          <td>2025-09-22</td>
+          <td>Exam Schedule Released</td>
+          <td>Mid-semester exam schedule released</td>
+          <td>All Classes</td>
+        </tr>
+        <tr>
+          <td>N002</td>
+          <td>2025-09-23</td>
+          <td>Assignment Reminder</td>
+          <td>Submit pending assignments before 25th Sep</td>
+          <td>All Classes</td>
+        </tr>
+        <tr>
+          <td>N003</td>
+          <td>2025-09-24</td>
+          <td>Library Book Return</td>
+          <td>Return borrowed library books by 28th Sep</td>
+          <td>CSE-A, CSE-B</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    function navigate(page){ window.location.href = page; }
+
+    function sendNotification() {
+      const title = document.getElementById('notifTitle').value;
+      const desc = document.getElementById('notifDesc').value;
+      const cls = document.getElementById('notifClass').value;
+      if(title === "" || desc === ""){
+        alert("Please fill all fields.");
+        return;
+      }
+
+      const table = document.getElementById('sentTable').getElementsByTagName('tbody')[0];
+      const row = table.insertRow();
+      const notifID = "N" + (table.rows.length+1).toString().padStart(3,'0');
+      const date = new Date().toISOString().split('T')[0];
+      row.insertCell(0).innerText = notifID;
+      row.insertCell(1).innerText = date;
+      row.insertCell(2).innerText = title;
+      row.insertCell(3).innerText = desc;
+      row.insertCell(4).innerText = cls;
+
+      alert("Notification sent to bhavyasrik2024@gmail.com!");
+      
+      // Clear form
+      document.getElementById('notifTitle').value = "";
+      document.getElementById('notifDesc').value = "";
+      document.getElementById('notifClass').value = "All Classes";
+    }
+  </script>
+</body>
+</html>

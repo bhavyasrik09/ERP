@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP - Exams & Marks</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding-top: 20px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      background: #34495e;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+      flex-grow: 1;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #f4f4f4;
+    }
+    .section-title {
+      margin: 25px 0 10px;
+      color: #2c3e50;
+    }
+    .back-btn {
+      padding: 8px 15px;
+      margin-bottom: 15px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>ERP Menu</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="fees.html">Fees</a>
+    <a href="library.html">Library</a>
+    <a href="hostel.html">Hostel</a>
+    <a href="exams.html">Exams & Marks</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="notifications.html">Notifications</a>
+    <a href="subjects.html">Subjects</a>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">⬅ Back</button>
+    <h1>Exams & Marks</h1>
+
+    <!-- Exam Schedule -->
+    <h2 class="section-title">Exam Schedule</h2>
+    <table id="examsTable">
+      <thead>
+        <tr>
+          <th>Exam ID</th>
+          <th>Course</th>
+          <th>Semester</th>
+          <th>Exam Name</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Total Marks</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Marks -->
+    <h2 class="section-title">Your Marks</h2>
+    <table id="marksTable">
+      <thead>
+        <tr>
+          <th>Subject Code</th>
+          <th>Subject Name</th>
+          <th>Semester</th>
+          <th>Exam Type</th>
+          <th>Marks Obtained</th>
+          <th>Max Marks</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwO4FPtIQl84aDjCnvIz9rERm5frgIO_pR6G16j5BYwFGKHJngSsE2hmv2zhRmY7u1s/exec";
+
+    document.addEventListener("DOMContentLoaded", async function(){
+      const regNo = localStorage.getItem("regNo");
+      if(!regNo){
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        // Load Exams
+        const examsRes = await fetch(`${API_URL}?action=exams&regNo=${regNo}`);
+        const examsData = await examsRes.json();
+        let examsHTML = "";
+        examsData.forEach(e => {
+          examsHTML += `<tr>
+                          <td>${e.ExamID}</td>
+                          <td>${e.CourseID}</td>
+                          <td>${e.Semester}</td>
+                          <td>${e.ExamName}</td>
+                          <td>${e.StartDate}</td>
+                          <td>${e.EndDate}</td>
+                          <td>${e.TotalMarks}</td>
+                        </tr>`;
+        });
+        document.querySelector("#examsTable tbody").innerHTML = examsHTML;
+
+        // Load Marks
+        const marksRes = await fetch(`${API_URL}?action=marks&regNo=${regNo}`);
+        const marksData = await marksRes.json();
+        let marksHTML = "";
+        marksData.forEach(m => {
+          marksHTML += `<tr>
+                          <td>${m.SubjectCode}</td>
+                          <td>${m.SubjectName}</td>
+                          <td>${m.Semester}</td>
+                          <td>${m.ExamType}</td>
+                          <td>${m.MarksObtained}</td>
+                          <td>${m.MaxMarks}</td>
+                        </tr>`;
+        });
+        document.querySelector("#marksTable tbody").innerHTML = marksHTML;
+
+      } catch(err){
+        console.error("Error loading exams/marks:", err);
+      }
+    });
+  </script>
+</body>
+</html>

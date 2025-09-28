@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faculty Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Faculty Portal</h2>
+    <button onclick="navigate('dashboard.html')">Dashboard</button>
+    <button onclick="navigate('profile.html')">Profile</button>
+    <button onclick="navigate('attendance.html')">Attendance</button>
+    <button onclick="navigate('marks.html')">Marks</button>
+    <button onclick="navigate('materials.html')">Materials</button>
+    <button onclick="navigate('exams.html')">Exams</button>
+    <button onclick="navigate('notifications.html')">Notifications</button>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="profile-info">
+        <strong>William Thompson</strong><br>
+        Dept: CSE
+      </div>
+    </div>
+
+    <h1>Dashboard</h1>
+
+    <div class="cards-container">
+      <div class="card">
+        <h3>Students Attendance</h3>
+        <canvas id="attendanceChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>Marks Distribution</h3>
+        <canvas id="marksChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>Notifications</h3>
+        <p>5 new notifications</p>
+      </div>
+      <div class="card">
+        <h3>Fees Collected</h3>
+        <p>₹1,20,000</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function navigate(page){
+    window.location.href = page;
+  }
+
+  // Set faculty profile info dynamically from localStorage
+  const facultyID = localStorage.getItem('facultyID');
+  const profileInfoDiv = document.querySelector('.profile-info');
+
+  // Static mapping of faculty info
+  const facultyData = {
+    'FAC001': { name: 'William Thompson', dept: 'CSE' },
+    'FAC002': { name: 'Charlotte Clark', dept: 'CSE' }
+  };
+
+  if(facultyID && facultyData[facultyID]){
+    profileInfoDiv.innerHTML = `<strong>${facultyData[facultyID].name}</strong><br>Dept: ${facultyData[facultyID].dept}`;
+  }
+
+  // Sample Chart Data
+  const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+  new Chart(attendanceCtx, {
+    type: 'bar',
+    data: {
+      labels: ['CSE-A', 'CSE-B', 'CSE-C'],
+      datasets: [{
+        label: 'Attendance %',
+        data: [85, 78, 92],
+        backgroundColor: 'rgba(54, 162, 235, 0.6)'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100 } }
+    }
+  });
+
+  const marksCtx = document.getElementById('marksChart').getContext('2d');
+  new Chart(marksCtx, {
+    type: 'line',
+    data: {
+      labels: ['Programming', 'Data Structures', 'Databases', 'Software Engineering'],
+      datasets: [{
+        label: 'Average Marks',
+        data: [78, 82, 74, 88],
+        borderColor: 'rgba(255, 99, 132, 0.8)',
+        fill: false,
+        tension: 0.4
+      }]
+    },
+    options: { responsive: true }
+  });
+</script>
+
+  
+</body>
+</html>

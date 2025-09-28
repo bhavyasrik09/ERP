@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP - Student Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding-top: 20px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      background: #34495e;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+      flex-grow: 1;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .profile-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+      max-width: 500px;
+    }
+    .profile-card h2 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .profile-card p {
+      margin: 8px 0;
+      font-size: 16px;
+    }
+    .logout-btn {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>ERP Menu</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="fees.html">Fees</a>
+    <a href="library.html">Library</a>
+    <a href="hostel.html">Hostel</a>
+    <a href="exams.html">Exams & Marks</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="notifications.html">Notifications</a>
+    <a href="subjects.html">Subjects</a>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+    <h1>Student Dashboard</h1>
+    <div class="profile-card">
+      <h2>Welcome, <span id="studentName">Loading...</span></h2>
+      <p><b>Register No:</b> <span id="regNo"></span></p>
+      <p><b>Department:</b> <span id="dept"></span></p>
+      <p><b>Batch:</b> <span id="batch"></span></p>
+      <p><b>Email:</b> <span id="email"></span></p>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwO4FPtIQl84aDjCnvIz9rERm5frgIO_pR6G16j5BYwFGKHJngSsE2hmv2zhRmY7u1s/exec";
+
+    function logout(){
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+
+    document.addEventListener("DOMContentLoaded", async function(){
+      const regNo = localStorage.getItem('regNo');
+      if(!regNo){
+        window.location.href = "index.html";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}?action=profile&regNo=${regNo}`);
+        const data = await res.json();
+
+        if(data.status === "notfound"){
+          alert("Profile not found!");
+          window.location.href = "index.html";
+          return;
+        }
+
+        document.getElementById("studentName").innerText = data.Name;
+        document.getElementById("regNo").innerText = data.RegisterNo;
+        document.getElementById("dept").innerText = data.Dept;
+        document.getElementById("batch").innerText = data.Batch;
+        document.getElementById("email").innerText = data.Email;
+
+      } catch(err){
+        console.error("Error fetching profile:", err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP - Hostel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding-top: 20px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      background: #34495e;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+      flex-grow: 1;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #f4f4f4;
+    }
+    .back-btn {
+      padding: 8px 15px;
+      margin-bottom: 15px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>ERP Menu</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="fees.html">Fees</a>
+    <a href="library.html">Library</a>
+    <a href="hostel.html">Hostel</a>
+    <a href="exams.html">Exams & Marks</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="notifications.html">Notifications</a>
+    <a href="subjects.html">Subjects</a>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <button class="back-btn" onclick="window.location.href='dashboard.html'">⬅ Back</button>
+    <h1>Hostel Allocation</h1>
+    
+    <table id="hostelTable">
+      <thead>
+        <tr>
+          <th>Room No</th>
+          <th>Hostel Name</th>
+          <th>Bed Number</th>
+          <th>Allocation Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwO4FPtIQl84aDjCnvIz9rERm5frgIO_pR6G16j5BYwFGKHJngSsE2hmv2zhRmY7u1s/exec";
+
+    async function loadHostel() {
+      const regNo = localStorage.getItem("regNo");
+      if(!regNo){ window.location.href = "index.html"; return; }
+
+      const res = await fetch(`${API_URL}?action=hostel&regNo=${regNo}`);
+      const data = await res.json();
+      let html = "";
+
+      if(data.length === 0){
+        html = `<tr><td colspan="5">No hostel allocated</td></tr>`;
+      } else {
+        data.forEach(h => {
+          html += `<tr>
+                    <td>${h.RoomNo}</td>
+                    <td>${h.HostelName}</td>
+                    <td>${h.BedNumber}</td>
+                    <td>${h.AllocationDate}</td>
+                    <td>${h.Status}</td>
+                  </tr>`;
+        });
+      }
+      document.querySelector("#hostelTable tbody").innerHTML = html;
+    }
+
+    document.addEventListener("DOMContentLoaded", loadHostel);
+  </script>
+</body>
+</html>

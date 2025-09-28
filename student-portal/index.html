@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP - Student Login</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+      width: 350px;
+      text-align: center;
+    }
+    .login-container h1 {
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      background: #3498db;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .login-container button:hover {
+      background: #2980b9;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>College ERP - Student Login</h1>
+    <input type="text" id="regNo" placeholder="Register No" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <div id="errorMsg" class="error"></div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbwO4FPtIQl84aDjCnvIz9rERm5frgIO_pR6G16j5BYwFGKHJngSsE2hmv2zhRmY7u1s/exec"; // Replace with your Apps Script URL
+
+    async function login() {
+      const regNo = document.getElementById('regNo').value.trim();
+      const password = document.getElementById('password').value.trim();
+      document.getElementById('errorMsg').innerText = "";
+
+      if (!regNo || !password) {
+        document.getElementById('errorMsg').innerText = "Please enter both Register No and Password";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}?action=login&regNo=${regNo}&password=${password}`);
+        const data = await res.json();
+
+        if (data.status === "success" && data.role === "student") {
+          localStorage.setItem("regNo", regNo);
+          localStorage.setItem("role", "student");
+          window.location.href = "dashboard.html";
+        } else {
+          document.getElementById('errorMsg').innerText = "Invalid credentials!";
+        }
+      } catch (err) {
+        document.getElementById('errorMsg').innerText = "Error connecting to server!";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
+

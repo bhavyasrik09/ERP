@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP - Subjects</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #f0f2f5;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      margin-bottom: 30px;
+    }
+    .sidebar button {
+      background: none;
+      border: none;
+      color: white;
+      text-align: left;
+      padding: 10px 0;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .sidebar button:hover {
+      color: #3498db;
+    }
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 20px 40px;
+      overflow-y: auto;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+    table th, table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    table th {
+      background: #3498db;
+      color: white;
+    }
+    table tr:hover {
+      background: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Student Portal</h2>
+    <button onclick="goBack()">← Back</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div class="content">
+    <h1>Subjects & Faculty</h1>
+    <table id="subjectsTable">
+      <thead>
+        <tr>
+          <th>Subject Code</th>
+          <th>Subject Name</th>
+          <th>Type</th>
+          <th>Credit</th>
+          <th>Department</th>
+          <th>Staff</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Subjects will load here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+
+    async function loadSubjects() {
+      const regNo = localStorage.getItem("regNo");
+      const API_URL = "https://script.google.com/macros/s/AKfycbwO4FPtIQl84aDjCnvIz9rERm5frgIO_pR6G16j5BYwFGKHJngSsE2hmv2zhRmY7u1s/exec"; // Replace with your Apps Script URL
+
+      try {
+        const res = await fetch(`${API_URL}?action=subjects&regNo=${regNo}`);
+        const data = await res.json();
+
+        let tbody = "";
+        data.forEach(s => {
+          tbody += `<tr>
+                      <td>${s.SubjectCode}</td>
+                      <td>${s.SubjectName}</td>
+                      <td>${s.SubType}</td>
+                      <td>${s.Credit}</td>
+                      <td>${s.Dept}</td>
+                      <td>${s.Staff}</td>
+                    </tr>`;
+        });
+
+        document.querySelector("#subjectsTable tbody").innerHTML = tbody;
+
+      } catch(err) {
+        console.error("Error loading subjects:", err);
+      }
+    }
+
+    window.onload = loadSubjects;
+  </script>
+</body>
+</html>

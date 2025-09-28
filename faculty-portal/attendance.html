@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Faculty Portal</h2>
+    <button onclick="navigate('dashboard.html')">Dashboard</button>
+    <button onclick="navigate('profile.html')">Profile</button>
+    <button onclick="navigate('attendance.html')">Attendance</button>
+    <button onclick="navigate('marks.html')">Marks</button>
+    <button onclick="navigate('materials.html')">Materials</button>
+    <button onclick="navigate('exams.html')">Exams</button>
+    <button onclick="navigate('notifications.html')">Notifications</button>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Attendance</h1>
+    </div>
+
+    <div class="card">
+      <h3>Attendance Summary</h3>
+      <canvas id="attendanceChart"></canvas>
+    </div>
+
+    <div class="card">
+      <h3>Class-wise Attendance</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Subject</th>
+            <th>Total Classes</th>
+            <th>Attended</th>
+            <th>Attendance %</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>John Doe</td>
+            <td>Programming</td>
+            <td>40</td>
+            <td>36</td>
+            <td>90%</td>
+          </tr>
+          <tr>
+            <td>Jane Smith</td>
+            <td>Data Structures</td>
+            <td>42</td>
+            <td>38</td>
+            <td>90.5%</td>
+          </tr>
+          <tr>
+            <td>Bob Johnson</td>
+            <td>Programming</td>
+            <td>40</td>
+            <td>35</td>
+            <td>87.5%</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="updated-message">Attendance updated!</p>
+    </div>
+  </div>
+  <div class="card">
+  <h3>Attendance Update</h3>
+  <form id="attendanceForm">
+    <label>Subject:</label>
+    <input type="text" value="Programming" required><br><br>
+    <label>Total Classes:</label>
+    <input type="number" value="40" required><br><br>
+    <label>Classes Attended:</label>
+    <input type="number" value="36" required><br><br>
+    <button type="submit">Update Attendance</button>
+    <div class="updated-message" style="display:none;">Updated!</div>
+  </form>
+</div>
+
+<script>
+  const attendanceForm = document.getElementById('attendanceForm');
+  attendanceForm.addEventListener('submit', e => {
+    e.preventDefault();
+    document.querySelector('#attendanceForm .updated-message').style.display = 'block';
+  });
+</script>
+
+
+  <script>
+    function navigate(page){
+      window.location.href = page;
+    }
+
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Programming', 'Data Structures', 'Databases'],
+        datasets: [{
+          label: 'Attendance %',
+          data: [88, 90, 85],
+          backgroundColor: 'rgba(75, 192, 192, 0.6)'
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true, max: 100 } }
+      }
+    });
+  </script>
+</body>
+</html>

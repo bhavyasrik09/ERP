@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Admin Portal</h2>
+    <button onclick="navigate('dashboard.html')">Dashboard</button>
+    <button onclick="navigate('faculty.html')">Faculty</button>
+    <button onclick="navigate('students.html')">Students</button>
+    <button onclick="navigate('fees.html')">Fees</button>
+    <button onclick="navigate('exams.html')">Exams</button>
+    <button onclick="navigate('notifications.html')">Notifications</button>
+    <button onclick="navigate('library.html')">Library</button>
+    <button onclick="navigate('hostel.html')">Hostel</button>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div class="profile-info">
+        <strong>Oliver King</strong><br>
+        Role: SuperAdmin
+      </div>
+    </div>
+
+    <h1>Dashboard</h1>
+
+    <div class="cards-container">
+      <div class="card">
+        <h3>Total Students</h3>
+        <p>160</p>
+      </div>
+      <div class="card">
+        <h3>Total Faculty</h3>
+        <p>12</p>
+      </div>
+      <div class="card">
+        <h3>Fees Collected</h3>
+        <p>₹12,50,000</p>
+      </div>
+      <div class="card">
+        <h3>Notifications</h3>
+        <p>3 New Notices</p>
+      </div>
+    </div>
+
+    <div class="charts-container">
+      <div class="chart-card">
+        <h3>Attendance % per Class</h3>
+        <canvas id="attendanceChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Average Marks per Subject</h3>
+        <canvas id="marksChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>Fees Collected per Department</h3>
+        <canvas id="feesChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function navigate(page){
+      window.location.href = page;
+    }
+
+    // Attendance Chart
+    const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(attendanceCtx, {
+      type: 'bar',
+      data: {
+        labels: ['CSE-A','CSE-B','ECE-A','ECE-B','EEE-A','EEE-B','MECH-A','MECH-B'],
+        datasets: [{
+          label: 'Attendance %',
+          data: [92, 88, 85, 90, 87, 89, 91, 86],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)'
+        }]
+      },
+      options: { responsive: true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, max:100}} }
+    });
+
+    // Marks Chart
+    const marksCtx = document.getElementById('marksChart').getContext('2d');
+    new Chart(marksCtx, {
+      type: 'line',
+      data: {
+        labels: ['Programming','Data Structures','Databases','OS','Software Eng'],
+        datasets: [{
+          label: 'Avg Marks',
+          data: [85, 82, 78, 88, 80],
+          borderColor: 'rgba(255, 99, 132, 0.8)',
+          fill: false,
+          tension: 0.4
+        }]
+      },
+      options: { responsive: true }
+    });
+
+    // Fees Chart
+    const feesCtx = document.getElementById('feesChart').getContext('2d');
+    new Chart(feesCtx, {
+      type: 'pie',
+      data: {
+        labels: ['CSE','ECE','EEE','MECH'],
+        datasets: [{
+          label: 'Fees Collected',
+          data: [400000, 350000, 300000, 200000],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(153, 102, 255, 0.6)'
+          ]
+        }]
+      },
+      options: { responsive: true }
+    });
+  </script>
+</body>
+</html>

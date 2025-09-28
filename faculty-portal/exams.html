@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exams</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Faculty Portal</h2>
+    <button onclick="navigate('dashboard.html')">Dashboard</button>
+    <button onclick="navigate('profile.html')">Profile</button>
+    <button onclick="navigate('attendance.html')">Attendance</button>
+    <button onclick="navigate('marks.html')">Marks</button>
+    <button onclick="navigate('materials.html')">Materials</button>
+    <button onclick="navigate('exams.html')">Exams</button>
+    <button onclick="navigate('notifications.html')">Notifications</button>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Exams</h1>
+    </div>
+
+    <div class="card">
+      <h3>Upcoming Exams</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Exam Name</th>
+            <th>Subject</th>
+            <th>Semester</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Midterm</td>
+            <td>Programming</td>
+            <td>3</td>
+            <td>2025-10-15</td>
+            <td>2025-10-16</td>
+          </tr>
+          <tr>
+            <td>Final</td>
+            <td>Data Structures</td>
+            <td>3</td>
+            <td>2025-11-20</td>
+            <td>2025-11-21</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="updated-message">Exams updated!</p>
+    </div>
+  </div>
+
+  <script>
+    function navigate(page){
+      window.location.href = page;
+    }
+  </script>
+  <div class="card">
+  <h3>Manage Exams</h3>
+  <form id="examsForm">
+    <label>Exam Name:</label>
+    <input type="text" value="Mid Term" required><br><br>
+    <label>Course:</label>
+    <input type="text" value="Programming" required><br><br>
+    <label>Start Date:</label>
+    <input type="date" value="2025-10-01" required><br><br>
+    <label>End Date:</label>
+    <input type="date" value="2025-10-05" required><br><br>
+    <label>Total Marks:</label>
+    <input type="number" value="40" required><br><br>
+    <button type="submit">Update Exam</button>
+    <div class="updated-message" style="display:none;">Updated!</div>
+  </form>
+</div>
+
+<script>
+  const examsForm = document.getElementById('examsForm');
+  examsForm.addEventListener('submit', e => {
+    e.preventDefault();
+    document.querySelector('#examsForm .updated-message').style.display = 'block';
+  });
+</script>
+
+</body>
+</html>

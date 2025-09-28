@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materials</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Faculty Portal</h2>
+    <button onclick="navigate('dashboard.html')">Dashboard</button>
+    <button onclick="navigate('profile.html')">Profile</button>
+    <button onclick="navigate('attendance.html')">Attendance</button>
+    <button onclick="navigate('marks.html')">Marks</button>
+    <button onclick="navigate('materials.html')">Materials</button>
+    <button onclick="navigate('exams.html')">Exams</button>
+    <button onclick="navigate('notifications.html')">Notifications</button>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <h1>Materials</h1>
+    </div>
+
+    <div class="card">
+      <h3>Available Materials</h3>
+      <ul class="materials-list">
+        <li><a href="materials/m1.pdf" target="_blank">m1.pdf</a> - Programming Basics</li>
+        <li><a href="materials/m2.pdf" target="_blank">m2.pdf</a> - Data Structures</li>
+        <li><a href="materials/m3.pdf" target="_blank">m3.pdf</a> - Databases</li>
+      </ul>
+      <p class="updated-message">Materials updated!</p>
+    </div>
+  </div>
+  <div class="card">
+  <h3>Upload / Edit Materials</h3>
+  <form id="materialsForm">
+    <label>Material Name:</label>
+    <input type="text" value="m1.pdf" required><br><br>
+    <label>Upload File:</label>
+    <input type="file"><br><br>
+    <button type="submit">Update Material</button>
+    <div class="updated-message" style="display:none;">Updated!</div>
+  </form>
+
+  <ul class="materials-list">
+    <li><a href="materials/m1.pdf" target="_blank">m1.pdf</a></li>
+    <li><a href="materials/m2.pdf" target="_blank">m2.pdf</a></li>
+  </ul>
+</div>
+
+<script>
+  const materialsForm = document.getElementById('materialsForm');
+  materialsForm.addEventListener('submit', e => {
+    e.preventDefault();
+    document.querySelector('#materialsForm .updated-message').style.display = 'block';
+  });
+</script>
+
+  <script>
+    function navigate(page){
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

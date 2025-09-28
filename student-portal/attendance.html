@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP - Attendance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      padding-top: 20px;
+    }
+    .sidebar h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 12px 20px;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .sidebar a:hover {
+      background: #34495e;
+    }
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+      flex-grow: 1;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #fff;
+      box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: #667eea;
+      color: white;
+    }
+    .present {
+      color: green;
+      font-weight: bold;
+    }
+    .absent {
+      color: red;
+      font-weight: bold;
+    }
+    .back-btn {
+      margin-top: 15px;
+      padding: 8px 15px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .back-btn:hover {
+      background: #5a67d8;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>ERP Menu</h2>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="fees.html">Fees</a>
+    <a href="library.html">Library</a>
+    <a href="hostel.html">Hostel</a>
+    <a href="exams.html">Exams & Marks</a>
+    <a href="attendance.html">Attendance</a>
+    <a href="notifications.html">Notifications</a>
+    <a href="subjects.html">Subjects</a>
+    <a href="index.html">Logout</a>
+  </div>
+
+  <div class="content">
+    <h1>Attendance</h1>
+    <button class="back-btn" onclick="history.back()">⬅ Back</button>
+
+    <table id="attendanceTable">
+      <thead>
+        <tr>
+          <th>Subject Code</th>
+          <th>Subject Name</th>
+          <th>Classes Attended</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data will load here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async function(){
+      const regNo = localStorage.getItem('regNo');
+      if(!regNo){
+        window.location.href = "index.html";
+        return;
+      }
+      const url = "https://script.google.com/macros/s/AKfycbwO4FPtIQl84aDjCnvIz9rERm5frgIO_pR6G16j5BYwFGKHJngSsE2hmv2zhRmY7u1s/exec?action=attendance&regNo=" + regNo; // replace with your Apps Script URL
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        const tableBody = document.querySelector("#attendanceTable tbody");
+        tableBody.innerHTML = "";
+
+        if(data.length === 0){
+          tableBody.innerHTML = "<tr><td colspan='4'>No attendance records found.</td></tr>";
+          return;
+        }
+
+        data.forEach(row => {
+          const status = row.AttendancePercentage >= 75 ? "✅ Present" : "❌ Absent";
+          const statusClass = row.AttendancePercentage >= 75 ? "present" : "absent";
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.SubjectCode || '-'}</td>
+            <td>${row.SubjectName || '-'}</td>
+            <td>${row.ClassesAttended} / ${row.TotalClasses}</td>
+            <td class="${statusClass}">${status}</td>
+          `;
+          tableBody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Error fetching attendance:", err);
+      }
+    });
+  </script>
+</body>
+</html>

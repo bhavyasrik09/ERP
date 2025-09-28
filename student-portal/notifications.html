@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College ERP - Notifications</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #f0f2f5;
+    }
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background: #2c3e50;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      margin-bottom: 30px;
+    }
+    .sidebar button {
+      background: none;
+      border: none;
+      color: white;
+      text-align: left;
+      padding: 10px 0;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    .sidebar button:hover {
+      color: #3498db;
+    }
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 20px 40px;
+      overflow-y: auto;
+    }
+    h1 {
+      margin-bottom: 20px;
+      color: #2c3e50;
+    }
+    ul.notifications {
+      list-style: none;
+      padding: 0;
+    }
+    ul.notifications li {
+      background: white;
+      padding: 15px 20px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      transition: 0.2s;
+    }
+    ul.notifications li:hover {
+      background: #ecf0f1;
+    }
+    .notif-date {
+      font-size: 12px;
+      color: gray;
+      float: right;
+    }
+    .notif-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+    .notif-desc {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Student Portal</h2>
+    <button onclick="goBack()">← Back</button>
+    <button onclick="logout()">Logout</button>
+  </div>
+
+  <div class="content">
+    <h1>Notifications</h1>
+    <ul id="notificationsList" class="notifications">
+      <!-- Notifications will load here -->
+    </ul>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    function goBack() {
+      window.location.href = "dashboard.html";
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+
+    async function loadNotifications() {
+      const regNo = localStorage.getItem("regNo");
+      const API_URL = "https://script.google.com/macros/s/AKfycbwO4FPtIQl84aDjCnvIz9rERm5frgIO_pR6G16j5BYwFGKHJngSsE2hmv2zhRmY7u1s/exec"; // Replace with your Apps Script URL
+
+      try {
+        const res = await fetch(`${API_URL}?action=notifications&regNo=${regNo}`);
+        const data = await res.json();
+
+        let html = "";
+        data.forEach(n => {
+          html += `<li>
+                     <div class="notif-title">${n.Title}</div>
+                     <div class="notif-desc">${n.Description}</div>
+                     <div class="notif-date">${n.Date}</div>
+                   </li>`;
+        });
+
+        document.getElementById("notificationsList").innerHTML = html;
+
+      } catch(err) {
+        console.error("Error loading notifications:", err);
+      }
+    }
+
+    // Load notifications on page load
+    window.onload = loadNotifications;
+  </script>
+</body>
+</html>
